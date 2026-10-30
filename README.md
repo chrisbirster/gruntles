@@ -8,23 +8,24 @@
 - `apps/mobile`: Expo / React Native app for iOS and Android.
 - `packages/shared`: TypeScript prompt catalog, journal types, and helpers shared by both apps.
 
-Stateful journal editing uses **use-immer** in both apps. MVP journal entries stay **local to each device**: browser localStorage on web and AsyncStorage on mobile. There is no account, sync, server, analytics, or notification service yet.
+Stateful journal editing uses **use-immer** in both apps. MVP journal entries stay **local to each device**: browser localStorage on web and AsyncStorage on mobile. There is no account, sync, server, analytics, or notification service yet. Web supports editing, deleting and JSON export of entries; mobile supports deleting entries and sharing a JSON backup through the native share sheet. Neither app currently imports backups.
 
 ## Start
 
 Prerequisites: Node.js 22+ and npm.
 
 ```sh
-npm install
+npm ci
 npm run dev:web
 npm run dev:mobile # in another terminal; Expo Go or a simulator
+npm run test
 npm run typecheck
 npm run build
 ```
 
 Web routes: `/` (landing) and `/journal` (interactive daily journaling). The mobile app contains Home, Guided Journal, Saved, and Archive flows.
 
-The brand illustration is an original SVG approximation of the selected cozy concept. The raster concept artwork is **not yet committed** to this repo; production artwork, responsive exports, store icons, and accessibility review remain follow-up tasks.
+The hero uses an optimized WebP crop of the **first selected Gruntles concept image** (`apps/web/public/art/approved-mascot.webp`). Original, reusable SVG artwork is also included for the web, and a compatible vector mascot is drawn with `react-native-svg` for Expo. Before production, export high-resolution standalone mascot poses, app-store icons, screenshots, and verify accessibility.
 
 ## Product principles
 
