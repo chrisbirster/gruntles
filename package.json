@@ -1,0 +1,20 @@
+{
+  "name": "gruntles",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "npm@11.6.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev -w @gruntles/web",
+    "dev:mobile": "npm run start -w @gruntles/mobile",
+    "build": "npm run build -w @gruntles/shared && npm run build -w @gruntles/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

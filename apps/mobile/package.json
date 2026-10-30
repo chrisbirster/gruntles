@@ -1,0 +1,26 @@
+{
+  "name": "@gruntles/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo/AppEntry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@gruntles/shared": "0.1.0",
+    "expo": "~54.0.0",
+    "expo-status-bar": "~3.0.9",
+    "react": "19.1.0",
+    "react-native": "0.81.4",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "immer": "^10.1.1",
+    "use-immer": "^0.11.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "typescript": "^5.9.0"
+  }
+}
