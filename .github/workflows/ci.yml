@@ -16,3 +16,5 @@ jobs:
       - run: npm run test
       - run: npm run typecheck
       - run: npm run build
+      - run: npm run export:ios -w @gruntles/mobile
+      - run: npm run export:android -w @gruntles/mobile
