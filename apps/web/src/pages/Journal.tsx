@@ -1,7 +1,7 @@
 import {useEffect,useState} from "react";
 import {Link} from "react-router";
 import {useImmer} from "use-immer";
-import {nightlyPrompts,STORAGE_KEY,type JournalEntry} from "@gruntles/shared";
+import {nightlyPrompts,STORAGE_KEY,parseJournalBackup,type JournalEntry} from "@gruntles/shared";
 import {Mascot} from "../components/Mascot";
 
 function readEntries(): JournalEntry[] {
@@ -42,6 +42,19 @@ export function Journal() {
   setEntries(draft=>{const i=draft.findIndex(value=>value.id===entry.id);if(i>=0)draft.splice(i,1)});
   setFeedback("Memory deleted.");
  }
+ async function importData(file:File|undefined){
+  if(!file)return;
+  if(file.size>5*1024*1024){setFeedback("The selected backup exceeds the 5 MB import limit.");return;}
+  try{
+   const imported=parseJournalBackup(await file.text());
+   const existingIds=new Set(entries.map(entry=>entry.id));
+   const additions=imported.filter(entry=>!existingIds.has(entry.id));
+   if(!additions.length){setFeedback("All memories in this backup are already here.");return;}
+   if(!window.confirm(`Add ${additions.length} memories from this backup? Existing memories will not be overwritten.`))return;
+   setEntries(draft=>{draft.push(...additions);draft.sort((a,b)=>b.createdAt.localeCompare(a.createdAt))});
+   setFeedback(`Restored ${additions.length} memories. ♡`);
+  }catch(error){setFeedback(error instanceof Error?error.message:"Could not read backup.")}
+ }
  function exportData(){
   const json=JSON.stringify({version:1,exportedAt:new Date().toISOString(),entries},null,2);
   const url=URL.createObjectURL(new Blob([json],{type:"application/json"}));
@@ -67,7 +80,7 @@ export function Journal() {
  </>:<>
  <p className="eyebrow">✦ YOUR LITTLE ARCHIVE</p><h1>Remember this?</h1>
  <p>The ordinary days make a pretty extraordinary collection.</p>
- <button className="button-outline" onClick={exportData} disabled={!entries.length}>Export JSON ↓</button>
+ <div className="archive-tools"><button className="button-outline" onClick={exportData} disabled={!entries.length}>Export JSON ↓</button><label className="button-outline">Restore backup ↑<input type="file" accept=".json,application/json" hidden onChange={event=>{void importData(event.currentTarget.files?.[0]);event.currentTarget.value="";}}/></label></div>
  {feedback&&<p role="status">{feedback}</p>}
  {entries.length===0?<div className="saved-entry"><p>No memories yet. Future you is excited to meet them.</p><button className="button-primary" onClick={begin}>Write your first entry</button></div>:entries.map(entry=><article className="saved-entry" key={entry.id}><small>{pretty(entry.createdAt)}</small>{nightlyPrompts.map(p=>entry.answers[p.id]?<p key={p.id}><b>{p.question}</b><br/>{entry.answers[p.id]}</p>:null)}<div className="entry-actions"><button className="button-outline" onClick={()=>edit(entry)}>Edit</button><button className="delete-button" onClick={()=>remove(entry)}>Delete</button></div></article>)}
  </>}

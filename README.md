@@ -8,7 +8,7 @@
 - `apps/mobile`: Expo / React Native app for iOS and Android.
 - `packages/shared`: TypeScript prompt catalog, journal types, and helpers shared by both apps.
 
-Stateful journal editing uses **use-immer** in both apps. MVP journal entries stay **local to each device**: browser localStorage on web and AsyncStorage on mobile. There is no account, sync, server, analytics, or notification service yet. Web supports editing, deleting and JSON export of entries; mobile supports deleting entries and sharing a JSON backup through the native share sheet. Neither app currently imports backups.
+Stateful journal editing uses **use-immer** in both apps. MVP journal entries stay **local to each device**: browser localStorage on web and AsyncStorage on mobile. There is no account, sync, server, analytics, or notification service yet. Web supports editing, deleting and JSON export of entries; mobile supports deleting entries and sharing a JSON backup through the native share sheet. Web can validate and restore a versioned JSON backup without overwriting existing entries. Mobile does not yet import backups.
 
 ## Start
 
@@ -21,6 +21,8 @@ npm run dev:mobile # in another terminal; Expo Go or a simulator
 npm run test
 npm run typecheck
 npm run build
+npm run export:ios -w @gruntles/mobile
+npm run export:android -w @gruntles/mobile
 ```
 
 Web routes: `/` (landing) and `/journal` (interactive daily journaling). The mobile app contains Home, Guided Journal, Saved, and Archive flows.
@@ -33,4 +35,4 @@ Three short reflections per evening, entirely optional answers, no forced positi
 
 ## Next steps
 
-Create a secure sync and account design only if users need cross-device access; add local encryption or device-level protection for sensitive journal text, plus backup/export/delete controls before public release. Configure App Store / Google Play identifiers and EAS credentials before builds.
+Create a secure sync and account design only if users need cross-device access; add local encryption or device-level protection for sensitive journal text, plus backup/export/delete controls before public release. CI checks Expo JavaScript export bundles for iOS and Android; native signed builds and real-device checks still require EAS credentials, signing setup and device testing. Configure App Store / Google Play identifiers and EAS credentials before submission.
