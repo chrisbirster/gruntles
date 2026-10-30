@@ -17,7 +17,8 @@
     "react-native": "0.81.4",
     "@react-native-async-storage/async-storage": "2.2.0",
     "immer": "^10.1.1",
-    "use-immer": "^0.11.0"
+    "use-immer": "^0.11.0",
+    "react-native-svg": "15.12.1"
   },
   "devDependencies": {
     "@types/react": "^19.1.0",
